@@ -14,7 +14,6 @@ import {NativeEventEmitter, NativeModules} from 'react-native';
 
 // MessageQueue.spy(spyFunction);
 
-// module.exports = NativeModules.MotionDnaReactBridge;
 import {
   Platform,
   StyleSheet,
@@ -23,13 +22,6 @@ import {
   View,
   PermissionsAndroid
 } from 'react-native';
-
-motionDNAstring = ""
-
-// function motionDNACallback(err, parameter) {
-    
-//     motionDNAstring = parameter
-// }
 
 async function requestNavisensPermission() {
   if(Platform.OS === 'android') {
@@ -93,59 +85,6 @@ export default class App extends Component<Props> {
             errorString: "NO ERROR STRING"
         };
         console.log("initialized react app")
-
-        this.motionManager = NativeModules.MotionDnaReactBridge
-        this.motionManager.runMotionDna("<YOUR DEVELOPER KEY>",() => {
-          this.motionManager.setLocationNavisens();
-          // this.motionManager.setLocationGPSOnly();
-          // this.motionManager.setBinaryFileLoggingEnabled(true)
-          // this.motionManager.setLocalHeadingOffsetInDegrees(90)
-
-          this.motionManager.setExternalPositioningState("HIGH_ACCURACY")
-          this.motionManager.setPowerMode("PERFORMANCE");
-          this.motionManager.setBackpropagationEnabled(true);
-          // this.motionManager.setBackpropagationBufferSize(100);
-          this.motionManager.setCallbackUpdateRateInMs(2000)
-
-
-          //this.motionManager.setNetworkUpdateRateInMs(100)
-        });
-
-        this.motionDnaEmitter = new NativeEventEmitter(this.motionManager);
-        console.log("set emitter")
-
-        this.subscription = this.motionDnaEmitter.addListener(
-            'MotionDnaEvent',
-            (motionDna) => {
-                // console.log("parameter: " + motionDna.location_localHeading);
-                this.setState({motionDNAstring: motionDna.MotionDnaString,
-                  locationStatus: motionDna.location_locationStatus,
-                    location_localLocation_x: motionDna.location_localLocation_x.toFixed(3),
-                    location_localLocation_y: motionDna.location_localLocation_y.toFixed(3),
-                    location_localLocation_z: motionDna.location_localLocation_z.toFixed(3),
-                    location_globalLocation_latitude: motionDna.location_globalLocation_latitude.toFixed(5),
-                    location_globalLocation_longitude: motionDna.location_globalLocation_longitude.toFixed(5),
-                    location_globalLocation_altitude: motionDna.location_globalLocation_altitude.toFixed(3),
-                    location_localHeading: motionDna.location_localHeading.toFixed(3),
-                    motion_motionType: motionDna.motion_motionType,
-                    gpsLocation_globalLocation_latitude: motionDna.GPSLocation_globalLocation_latitude.toFixed(5),
-                    gpsLocation_globalLocation_longitude: motionDna.GPSLocation_globalLocation_longitude.toFixed(5),
-                    gpsLocation_globalLocation_altitude: motionDna.GPSLocation_globalLocation_altitude.toFixed(3),
-                    navidate: motionDna.timestamp.toString()
-                        });
-                        // console.log(this.state.navidate)
-                // this.setState({[motionDna.target.id]:motionDna.target.value});
-            });
-
-          this.errorSubscription = this.motionDnaEmitter.addListener('MotionDnaErrorEvent',(error) => {
-            this.setState({
-              errorCode: error.errorCode,
-              errorString: error.errorString 
-            });
-          });
-        console.log("done initializing")
-        
-        // this.motionManager.setMotionDnaCallback((err, parameter) => 
     }
     
   render() {
